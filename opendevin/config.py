@@ -21,6 +21,8 @@ DEFAULT_CONFIG: dict = {
     ConfigType.DIRECTORY_REWRITE: '',
     ConfigType.MAX_ITERATIONS: 100,
     ConfigType.AGENT: 'MonologueAgent',
+    ConfigType.LLM_DEPLOYMENT_NAME: '',
+    ConfigType.LLM_API_VERSION: '',
 }
 
 config_str = ''

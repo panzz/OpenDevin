@@ -10,6 +10,7 @@ DEFAULT_BASE_URL = config.get('LLM_BASE_URL')
 DEFAULT_MODEL_NAME = config.get('LLM_MODEL')
 DEFAULT_LLM_NUM_RETRIES = config.get('LLM_NUM_RETRIES')
 DEFAULT_LLM_COOLDOWN_TIME = config.get('LLM_COOLDOWN_TIME')
+DEFAULT_LLM_API_VERSION = config.get('LLM_API_VERSION')
 
 
 class LLM:
@@ -19,12 +20,14 @@ class LLM:
                  base_url=DEFAULT_BASE_URL,
                  num_retries=DEFAULT_LLM_NUM_RETRIES,
                  cooldown_time=DEFAULT_LLM_COOLDOWN_TIME,
+                 api_version=DEFAULT_LLM_API_VERSION,
                  ):
         self.model_name = model if model else DEFAULT_MODEL_NAME
         self.api_key = api_key if api_key else DEFAULT_API_KEY
         self.base_url = base_url if base_url else DEFAULT_BASE_URL
+        self.api_version = api_version if api_version else DEFAULT_LLM_API_VERSION
 
-        self._completion = partial(litellm_completion, model=self.model_name, api_key=self.api_key, base_url=self.base_url)
+        self._completion = partial(litellm_completion, model=self.model_name, api_key=self.api_key, base_url=self.base_url, api_version=self.api_version)
 
         completion_unwrapped = self._completion
 

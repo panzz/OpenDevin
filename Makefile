@@ -24,7 +24,7 @@ build:
 	@$(MAKE) -s pull-docker-image
 	@$(MAKE) -s install-python-dependencies
 	@$(MAKE) -s install-frontend-dependencies
-	@$(MAKE) -s install-precommit-hooks
+#	@$(MAKE) -s install-precommit-hooks
 	@echo "$(GREEN)Build completed successfully.$(RESET)"
 
 check-dependencies:
@@ -94,7 +94,7 @@ install-frontend-dependencies:
 	@cd frontend && node ./scripts/detect-node-version.js
 	@cd frontend && \
 		echo "$(BLUE)Installing frontend dependencies with npm...$(RESET)" && \
-		npm install && \
+		npm install --registry=https://maven.xpaas.lenovo.com/nexus/repository/npm/&& \
 		echo "$(BLUE)Running make-i18n with npm...$(RESET)" && \
 		npm run make-i18n
 	@echo "$(GREEN)Frontend dependencies installed successfully.$(RESET)"
