@@ -6,6 +6,8 @@ from opendevin.action import AgentFinishAction
 from opendevin.llm.llm import LLM
 from opendevin.state import State
 from opendevin.action import Action
+from agenthub.monologue_agent.utils.tools import show_exec_time
+# from opendevin.logging import opendevin_logger as logger
 
 class PlannerAgent(Agent):
     """
@@ -22,6 +24,7 @@ class PlannerAgent(Agent):
         """
         super().__init__(llm)
 
+    @show_exec_time
     def step(self, state: State) -> Action:
         """
         Checks to see if current step is completed, returns AgentFinishAction if True. 
@@ -42,6 +45,7 @@ class PlannerAgent(Agent):
         resp = self.llm.completion(messages=messages)
         action_resp = resp['choices'][0]['message']['content']
         action = parse_response(action_resp)
+        # logger.debug(f"PlannerAgent.step> action: {action}")
         return action
 
     def search_memory(self, query: str) -> List[str]:

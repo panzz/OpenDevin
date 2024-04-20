@@ -27,6 +27,8 @@ from opendevin.observation import (
 import agenthub.monologue_agent.utils.prompts as prompts
 from agenthub.monologue_agent.utils.monologue import Monologue
 from agenthub.monologue_agent.utils.memory import LongTermMemory
+from agenthub.monologue_agent.utils.tools import show_exec_time
+from opendevin.logging import opendevin_logger as logger
 
 MAX_MONOLOGUE_LENGTH = 20000
 MAX_OUTPUT_LENGTH = 5000
@@ -145,6 +147,7 @@ class MonologueAgent(Agent):
         output_type = ""
         for thought in INITIAL_THOUGHTS:
             thought = thought.replace("$TASK", task)
+            logger.debug(f"MonologueAgent:_initialize> task:{task}, thought(output_type:{output_type}):{thought}")
             if output_type != "":
                 observation: Observation = NullObservation(content="")
                 if output_type == ObservationType.RUN:
@@ -165,23 +168,28 @@ class MonologueAgent(Agent):
                 action: Action = NullAction()
                 if thought.startswith("RUN"):
                     command = thought.split("RUN ")[1]
+                    logger.debug(f"MonologueAgent:_initialize> thought(command:{command}):{thought}")
                     action = CmdRunAction(command)
                     output_type = ActionType.RUN
                 elif thought.startswith("WRITE"):
                     parts = thought.split("WRITE ")[1].split(" > ")
                     path = parts[1]
                     content = parts[0]
+                    logger.debug(f"MonologueAgent:_initialize> thought(content:{content}):{thought}")
                     action = FileWriteAction(path=path, content=content)
                 elif thought.startswith("READ"):
                     path = thought.split("READ ")[1]
+                    logger.debug(f"MonologueAgent:_initialize> thought(path:{path}):{thought}")
                     action = FileReadAction(path=path)
                     output_type = ActionType.READ
                 elif thought.startswith("RECALL"):
                     query = thought.split("RECALL ")[1]
+                    logger.debug(f"MonologueAgent:_initialize> thought(query:{query}):{thought}")
                     action = AgentRecallAction(query=query)
                     output_type = ActionType.RECALL
                 elif thought.startswith("BROWSE"):
                     url = thought.split("BROWSE ")[1]
+                    logger.debug(f"MonologueAgent:_initialize> thought(url:{url}):{thought}")
                     action = BrowseURLAction(url=url)
                     output_type = ActionType.BROWSE
                 else:
@@ -189,6 +197,7 @@ class MonologueAgent(Agent):
                 self._add_event(action.to_dict())
         self._initialized = True
 
+    @show_exec_time
     def step(self, state: State) -> Action:
         """
         Modifies the current state by adding the most recent actions and observations, then prompts the model to think about it's next action to take using monologue, memory, and hint.
@@ -215,6 +224,7 @@ class MonologueAgent(Agent):
         resp = self.llm.completion(messages=messages)
         action_resp = resp["choices"][0]["message"]["content"]
         action = prompts.parse_action_response(action_resp)
+        # logger.debug(f"MonologueAgent.step> action: {action}")
         self.latest_action = action
         return action
 

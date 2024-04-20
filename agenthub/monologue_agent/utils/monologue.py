@@ -2,6 +2,8 @@ import traceback
 from opendevin.llm.llm import LLM
 import agenthub.monologue_agent.utils.json as json
 import agenthub.monologue_agent.utils.prompts as prompts
+from agenthub.monologue_agent.utils.tools import show_exec_time
+from opendevin.logging import opendevin_logger as logger
 
 class Monologue:
     """
@@ -53,6 +55,7 @@ class Monologue:
                 print(f"Error serializing thought: {e}")
         return total_length
 
+    @show_exec_time
     def condense(self, llm: LLM):
         """
         Attempts to condense the monologue by using the llm
@@ -70,6 +73,7 @@ class Monologue:
             resp = llm.completion(messages=messages)
             summary_resp = resp['choices'][0]['message']['content']
             self.thoughts = prompts.parse_summary_response(strip_markdown(summary_resp))
+            logger.debug(f"MonologueAgent:condense> thoughts:{self.thoughts}")
         except Exception as e:
             traceback.print_exc()
             raise RuntimeError(f"Error condensing thoughts: {e}")

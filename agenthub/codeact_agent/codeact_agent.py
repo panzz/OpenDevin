@@ -15,6 +15,8 @@ from opendevin.observation import (
 )
 from opendevin.parse_commands import parse_command_file
 from opendevin.state import State
+from agenthub.monologue_agent.utils.tools import show_exec_time
+from opendevin.logging import opendevin_logger as logger
 
 COMMAND_DOCS = parse_command_file()
 COMMAND_SEGMENT = (
@@ -80,6 +82,7 @@ class CodeActAgent(Agent):
         super().__init__(llm)
         self.messages: List[Mapping[str, str]] = []
 
+    @show_exec_time
     def step(self, state: State) -> Action:
         """
         Performs one step using the Code Act Agent. 
@@ -126,6 +129,7 @@ class CodeActAgent(Agent):
             temperature=0.0
         )
         action_str: str = parse_response(response)
+        logger.debug(f"CodeActAgent.step> action_str: {action_str}")
         self.messages.append({"role": "assistant", "content": action_str})
 
         command = re.search(r"<execute>(.*)</execute>", action_str, re.DOTALL)
