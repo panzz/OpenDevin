@@ -170,7 +170,7 @@ class AgentController:
 
         if action.executable:
             try:
-                if inspect.isawaitable(action.run(self)):
+                if inspect.isawaitable(action.run):
                     observation = await cast(Awaitable[Observation], action.run(self))
                 else:
                     observation = action.run(self)

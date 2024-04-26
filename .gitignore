@@ -201,7 +201,7 @@ logs
 cache
 
 # configuration
-config*.toml
+config.toml*
 
 # personal
 test.md

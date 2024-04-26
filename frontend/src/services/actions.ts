@@ -19,7 +19,8 @@ const messageActions = {
     }
     store.dispatch(
       appendAssistantMessage(
-        "Hi! I'm OpenDevin, an AI Software Engineer. What would you like to build with me today?",
+        // "Hi! I'm OpenDevin, an AI Software Engineer. What would you like to build with me today?",
+        "你好！ 我是 OpenDevin，一名人工智能软件工程师。 今天你想和我一起做点啥？",
       ),
     );
     isInitialized = true;

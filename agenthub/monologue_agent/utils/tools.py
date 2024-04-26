@@ -20,8 +20,8 @@ def show_exec_time(func):
     result = func(*args, **kwargs)
     end_time = time.time()
     execution_time = int((end_time - start_time)*1000)
-    # logger.debug(f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')} [exec-time] {func.__name__} ran in {execution_time} ms")
-    logger.debug(f"[exec-time] {func.__name__} ran in {execution_time} ms")
+    # logger.info(f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')} [exec-time] {func.__name__} ran in {execution_time} ms")
+    logger.info(f"[exec-time] {func.__name__} ran in {execution_time} ms")
     return result
   return wrapper
 

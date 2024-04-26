@@ -17,4 +17,5 @@ class AgentRecallObservation(Observation):
 
     @property
     def message(self) -> str:
-        return "The agent recalled memories."
+        # return "The agent recalled memories."
+        return "The agent 在脑子里想了想，召回了记忆."

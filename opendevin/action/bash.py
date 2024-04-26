@@ -20,7 +20,8 @@ class CmdRunAction(ExecutableAction):
 
     @property
     def message(self) -> str:
-        return f"Running command: {self.command}"
+        # return f"Running command: {self.command}"
+        return f"运行的命令: {self.command}"
 
 
 @dataclass
@@ -33,4 +34,5 @@ class CmdKillAction(ExecutableAction):
 
     @property
     def message(self) -> str:
-        return f"Killing command: {self.id}"
+        # return f"Killing command: {self.id}"
+        return f"杀死进程的命令: {self.id}"

@@ -32,7 +32,8 @@ class Socket {
       };
 
       Socket._socket.onerror = () => {
-        const msg = "Failed connection to server";
+        // const msg = "Failed connection to server";
+        const msg = "服务器连接失败";
         store.dispatch(appendError(msg));
         setTimeout(() => {
           store.dispatch(removeError(msg));

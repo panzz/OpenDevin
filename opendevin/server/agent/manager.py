@@ -147,7 +147,8 @@ class AgentManager:
         if 'task' not in start_event['args']:
             await self.send_error('No task specified')
             return
-        await self.send_message('Starting new task...')
+        # await self.send_message('Starting new task...')
+        await self.send_message('启动一个新任务...')
         task = start_event['args']['task']
         if self.controller is None:
             await self.send_error('No agent started. Please wait a second...')

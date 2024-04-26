@@ -15,7 +15,8 @@ class FileReadObservation(Observation):
 
     @property
     def message(self) -> str:
-        return f"I read the file {self.path}."
+        # return f"I read the file {self.path}."
+        return f"我读了文件 {self.path}."
 
 
 @dataclass
@@ -29,4 +30,5 @@ class FileWriteObservation(Observation):
 
     @property
     def message(self) -> str:
-        return f"I wrote to the file {self.path}."
+        # return f"I wrote to the file {self.path}."
+        return f"我写入文件 {self.path}."

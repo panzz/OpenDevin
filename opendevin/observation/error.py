@@ -14,4 +14,5 @@ class AgentErrorObservation(Observation):
 
     @property
     def message(self) -> str:
-        return "Oops. Something went wrong: " + self.content
+        # return "Oops. Something went wrong: " + self.content
+        return "哎呀。 出了些问题: " + self.content

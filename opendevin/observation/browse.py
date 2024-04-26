@@ -18,4 +18,5 @@ class BrowserOutputObservation(Observation):
 
     @property
     def message(self) -> str:
-        return "Visited " + self.url
+        # return "Visited " + self.url
+        return "访问过 " + self.url

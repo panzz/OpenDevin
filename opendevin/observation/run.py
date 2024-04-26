@@ -21,4 +21,5 @@ class CmdOutputObservation(Observation):
 
     @property
     def message(self) -> str:
-        return f"Command `{self.command}` executed with exit code {self.exit_code}."
+        # return f"Command `{self.command}` executed with exit code {self.exit_code}."
+        return f"命令 `{self.command}` 执行，退出代码为 {self.exit_code}."

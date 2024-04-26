@@ -33,7 +33,7 @@ from opendevin.logging import opendevin_logger as logger
 MAX_MONOLOGUE_LENGTH = 20000
 MAX_OUTPUT_LENGTH = 5000
 
-INITIAL_THOUGHTS = [
+INITIAL_THOUGHTS_EN = [
     "I exist!",
     "Hmm...looks like I can type in a command line prompt",
     "Looks like I have a web browser too!",
@@ -76,6 +76,50 @@ INITIAL_THOUGHTS = [
     "In between actions, I must always take some time to think, strategize, and set new goals. I should never take two actions in a row.",
     "OK so my task is to $TASK. I haven't made any progress yet. Where should I start?",
     "It seems like there might be an existing project here. I should probably start by running `ls` to see what's here.",
+]
+INITIAL_THOUGHTS = [
+    "我存在！",
+    "嗯...看起来我可以输入命令行提示符",
+    "看来我也有网络浏览器了！",
+    "这就是我想做的：$TASK",
+    "我要怎样才能到达那里呢？",
+    "看来我有某种短期记忆。",
+    "我的每一个想法似乎都存储在一个 JSON 数组中。",
+    "看来我接下来所说的一切都会作为一个对象添加到列表中。",
+    "但没有人拥有完美的短期记忆。我的想法清单会随着时间的推移而被总结和浓缩，并在此过程中丢失信息。",
+    "幸运的是我有长期记忆！",
+    "我可以执行一个RECALL action，然后是我想要记住的事情。然后相关的想法就会蹦出来！",
+    "有时有一些随机的想法与我想记住的内容无关。但通常它们正是我需要的！",
+    "我们来试试吧！",
+    "RECALL 我想做的事",
+    "这就是我想做的: $TASK",
+    "我要怎样才能到达那里呢？",
+    "太棒了！看起来我使用命令行也很容易！我只需要执行一个运行action，并将我想要运行的命令包含在命令参数中。命令输出就会跳入我的脑海中！",
+    'RUN echo "hello world"',
+    "hello world",
+    "酷！我打赌我也可以使用写入action写入文件。",
+    "WRITE echo \"console.log('hello world')\" > test.js",
+    "",
+    "我刚刚创建了 test.js。我现在尝试运行它。",
+    "RUN node test.js",
+    "hello world",
+    "它能运行起来!",
+    "我现在要尝试使用读取action来读取它。",
+    "READ test.js",
+    "console.log('hello world')",
+    "太好了！我也可以读取文件了！",
+    "如果我想使用浏览器，我只需要使用浏览action并在 url 参数中包含我想要访问的 url",
+    "我们试试吧...",
+    "BROWSE google.com",
+    '<form><input type="text"></input><button type="submit"></button></form>',
+    "我也可以浏览网页了！",
+    "一旦我完成了任务，我就可以使用finish action来停止工作。",
+    "但是，只有当我绝对确定我已经完成了我的任务并测试了我的工作时，我才应该使用finish action。",
+    "非常酷。现在要完成我的任务了。",
+    "我需要一个策略。随着我的进步，我需要不断完善该策略。我需要设定目标，并将其分解为子目标。",
+    "在action之间，我必须始终花一些时间思考、制定策略并设定新目标。我永远不应该连续采取两项action。",
+    "好的，所以我的任务是$TASK。我还没有取得任何进展。我应该从哪里开始？”,",
+    "这里似乎可能有一个现有项目。我可能应该首先运行 `ls` 来看看这里有什么。",
 ]
 
 

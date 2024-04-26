@@ -10,7 +10,7 @@ from opendevin.observation import (
     CmdOutputObservation,
 )
 
-ACTION_PROMPT = """
+ACTION_PROMPT_OLD = """
 You're a thoughtful robot. Your main task is this:
 
 %(task)s
@@ -63,7 +63,61 @@ What is your next thought or action? Again, you must reply with JSON, and only w
 %(hint)s
 """
 
-MONOLOGUE_SUMMARY_PROMPT = """
+ACTION_PROMPT = """
+你是一个有思想的机器人。 你的主要任务是这样的：
+
+%(task)s
+
+不要扩大你的任务范围——只需按照书面规定完成即可。
+
+这是你的内心独白，JSON 格式：
+
+%(monologue)s
+
+
+你最近的想法就在这段独白的底部。 继续你的思路。
+您下一步的想法或行动是什么？ 您的响应必须采用 JSON 格式。
+它必须是一个对象，并且必须包含两个字段：
+* `action`, 这是以下操作之一
+* `args`,这是键值对的映射，指定该操作的参数
+
+以下是可能的操作：
+* `read` - 读取文件的内容。 Arguments:
+  * `path` - 要读取的文件的路径
+* `write` - 将内容写入文件。 Arguments:
+  * `path` - 要写入的文件的路径
+  * `content` - 要写入文件的内容
+* `run` - 运行命令。Arguments:
+  * `command` - 要运行的命令
+  * `background` - 如果为 true，则在后台运行该命令，以便其他命令可以同时运行。 对于例如有用 启动服务器。 您将无法看到日志。 您不需要以“&”结束命令，只需将其设置为 true 即可。
+* `kill` - 杀死后台命令
+  * `id` - 要杀死的后台命令的ID
+* `browse` - 打开网页。 Arguments:
+  * `url` - 要打开的 URL
+* `recall` - 回忆过去的记忆。Arguments:
+  * `query` - 要搜索的查询
+* `think` - 制定计划、设定目标或记录您的想法。 Arguments:
+  * `thought` - 要记录的想法
+* `finish` - 如果您绝对确定已完成任务并测试了您的工作，请使用finish action来停止工作。
+
+%(background_commands)s
+
+您必须花时间在读取、写入、运行、浏览和调用操作之间进行思考。
+你不应该不假思索地连续两次行动。 但如果你最后几个
+行动都是“思考”行动，你应该考虑采取不同的行动。
+
+注意:
+* 您的环境是 Debian Linux。 您可以使用`apt`安装软件
+* 即使你运行 `cd`，你的工作目录也不会改变。 所有命令都将在“/workspace”目录中运行。
+* 不要运行交互式命令或不返回的命令（例如“node server.js”）。 您可以在后台运行命令（例如“node server.js &”）
+
+您下一步的想法或行动是什么？ 最后，您必须使用 JSON 进行回复，并且只能使用 JSON。
+
+%(hint)s
+"""
+
+
+MONOLOGUE_SUMMARY_PROMPT_OLD = """
 Below is the internal monologue of an automated LLM agent. Each
 thought is an item in a JSON array. The thoughts may be memories,
 actions taken by the agent, or outputs from those actions.
@@ -84,6 +138,24 @@ key `new_monologue`, which is a JSON array containing the summarized monologue.
 Each entry in the array must have an `action` key, and an `args` key.
 The action key may be `summarize`, and `args.summary` should contain the summary.
 You can also use the same action and args from the source monologue.
+"""
+
+MONOLOGUE_SUMMARY_PROMPT = """
+以下是自动化LLM agent的内心独白。每个
+thought 都是 JSON 数组中的一项。The thoughts 可能是记忆,
+actions taken by the agent, 或者从这些actions里输出.
+请返回一个新的、更小的 JSON 数组，其中总结了内心独白。 可以总结一下个人的想法，
+你可以将相关的想法与描述与他们的内容结合起来。
+
+%(monologue)s
+
+你要确保摘要尽可能简洁且内容丰富。
+你要具体说明发生了什么以及从中学到了什么。摘要将用作搜索原始记忆的关键字。请务必保留所有关键词或重要信息。
+
+您的回复必须采用 JSON 格式。它必须是一个包含带有key值 `new_monologue`的对象，同时它也是一个包含摘要独白的 JSON 数组。
+数组中的每个条目都必须有一个`action` key和一个`args` key。
+The action key可以是`summarize`，并且`args.summary`应包含摘要。
+您还可以使用源独白中的相同action和参数。
 """
 
 
@@ -120,19 +192,25 @@ def get_request_action_prompt(
         latest_thought = thoughts[-1]
         if "action" in latest_thought:
             if latest_thought["action"] == 'think':
-                if latest_thought["args"]['thought'].startswith("OK so my task is"):
-                    hint = "You're just getting started! What should you do first?"
+                # if latest_thought["args"]['thought'].startswith("OK so my task is"):
+                if latest_thought["args"]['thought'].startswith("好的，所以我的任务是"):
+                    # hint = "You're just getting started! What should you do first?"
+                    hint = "你才刚刚开始！ 你应该先做什么？"
                 else:
-                    hint = "You've been thinking a lot lately. Maybe it's time to take action?"
+                    #  hint = "You've been thinking a lot lately. Maybe it's time to take action?"
+                    hint = "你最近想了很多。 也许是时候take action?"
             elif latest_thought["action"] == 'error':
-                hint = "Looks like that last command failed. Maybe you need to fix it, or try something else."
+                # hint = "Looks like that last command failed. Maybe you need to fix it, or try something else."
+                hint = "看起来最后一个命令失败了。 也许您需要修复它，或者尝试其他方法。"
 
     bg_commands_message = ""
     if len(background_commands_obs) > 0:
-        bg_commands_message = "The following commands are running in the background:"
+        # bg_commands_message = "The following commands are running in the background:"
+        bg_commands_message = "以下命令在后台运行："
         for command_obs in background_commands_obs:
             bg_commands_message += f"\n`{command_obs.command_id}`: {command_obs.command}"
-        bg_commands_message += "\nYou can end any process by sending a `kill` action with the numerical `id` above."
+        # bg_commands_message += "\nYou can end any process by sending a `kill` action with the numerical `id` above."
+        bg_commands_message += "\n您可以通过发送带有上面数字“id”的“kill”操作来结束任何进程。"
         
     return ACTION_PROMPT % {
         'task': task,
