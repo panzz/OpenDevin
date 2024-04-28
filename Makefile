@@ -3,7 +3,7 @@
 # Variables
 DOCKER_IMAGE = ghcr.io/opendevin/sandbox
 BACKEND_PORT = 3000
-BACKEND_HOST = "127.0.0.1:$(BACKEND_PORT)"
+BACKEND_HOST = "0.0.0.0:$(BACKEND_PORT)"
 FRONTEND_PORT = 3001
 DEFAULT_WORKSPACE_DIR = "./workspace"
 DEFAULT_MODEL = "gpt-3.5-turbo-1106"
