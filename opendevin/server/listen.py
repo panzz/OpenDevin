@@ -17,9 +17,10 @@ from opendevin.server.auth import get_sid_from_token, sign_token
 from opendevin.server.session import message_stack, session_manager
 
 app = FastAPI()
+origins = ['*']  # ['http://localhost:3001']
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['http://localhost:3001'],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],

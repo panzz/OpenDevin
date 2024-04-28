@@ -106,9 +106,14 @@ install-precommit-hooks:
 	@echo "$(GREEN)Pre-commit hooks installed successfully.$(RESET)"
 
 # Start backend
+dev-backend:
+	@echo "$(YELLOW)Starting backend...$(RESET)"
+	@poetry run uvicorn opendevin.server.listen:app --reload --host 0.0.0.0 --port $(BACKEND_PORT)
+
+# Start backend
 start-backend:
 	@echo "$(YELLOW)Starting backend...$(RESET)"
-	@poetry run uvicorn opendevin.server.listen:app --port $(BACKEND_PORT)
+	@poetry run uvicorn opendevin.server.listen:app --host 0.0.0.0 --port $(BACKEND_PORT)
 
 # Start frontend
 start-frontend:
