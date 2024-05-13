@@ -214,7 +214,7 @@ def get_request_action_prompt(
         
     return ACTION_PROMPT % {
         'task': task,
-        'monologue': json.dumps(thoughts, indent=2, ensure_ascii=Falses),
+        'monologue': json.dumps(thoughts, indent=2, ensure_ascii=False),
         'background_commands': bg_commands_message,
         'hint': hint,
     }

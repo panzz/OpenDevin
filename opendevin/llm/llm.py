@@ -1,4 +1,4 @@
-
+import json
 from litellm import completion as litellm_completion
 from functools import partial
 
@@ -40,7 +40,7 @@ class LLM:
             resp = completion_unwrapped(*args, **kwargs)
             message_back = resp['choices'][0]['message']['content']
             # llm_response_logger.debug(message_back)
-            llm_response_logger.debug(json.dumps(json.loads(message_backs), ensure_ascii=False).encode('utf8'))
+            llm_response_logger.debug(json.dumps(json.loads(message_back), ensure_ascii=False).encode('utf8'))
             return resp
         self._completion = wrapper  # type: ignore
 
