@@ -24,10 +24,10 @@ class CommandManager:
     def _run_immediately(self, command: str) -> CmdOutputObservation:
         print(f"_run_immediately> command:{command}")
         dbg_exit_code, dbg_output = self.shell.execute('pwd')
-        print(f"_run_immediately> dbg_output({dbg_exit_code}):{dbg_output}")
+        # print(f"_run_immediately> dbg_output({dbg_exit_code}):{dbg_output}")
         exit_code, output = self.shell.execute(command)
         dbg_exit_code, dbg_output = self.shell.execute('pwd')
-        print(f"_run_immediately> 1 dbg_output({dbg_exit_code}):{dbg_output}")
+        print(f"_run_immediately> dbg_output({dbg_exit_code}):{dbg_output}")
         return CmdOutputObservation(
             command_id=-1, content=output, command=command, exit_code=exit_code
         )

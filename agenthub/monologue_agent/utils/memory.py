@@ -72,7 +72,7 @@ class LongTermMemory:
             t = "observation"
             id = event["observation"]
         doc = Document(
-            text=json.dumps(event),
+            text=json.dumps(event, ensure_ascii=False),
             doc_id=str(self.thought_idx),
             extra_info={
                 "type": t,

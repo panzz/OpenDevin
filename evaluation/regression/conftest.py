@@ -136,7 +136,7 @@ def pytest_configure(config):
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
         handlers=[
-            logging.FileHandler(f"test_results_{now.strftime('%Y%m%d_%H%M%S')}.log"),
+            logging.FileHandler(f"test_results_{now.strftime('%Y%m%d_%H%M%S')}.log", encoding='utf-8'),
             logging.StreamHandler()
         ]
     )

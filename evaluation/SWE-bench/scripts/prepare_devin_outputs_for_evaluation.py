@@ -57,17 +57,17 @@ def get_devin_eval_output(setting):
         os.makedirs(output_dir)
 
     if setting == "passed" or setting == "all":
-        with open(os.path.join(output_dir, "devin_swe_passed.json"), "w") as pass_file:
-            json.dump(pass_files_info, pass_file, indent=4)
+        with open(os.path.join(output_dir, "devin_swe_passed.json"), "w", encoding = 'utf8') as pass_file:
+            json.dump(pass_files_info, pass_file, indent=4, ensure_ascii=False)
 
     if setting == "failed" or setting == "all":
-        with open(os.path.join(output_dir, "devin_swe_failed.json"), "w") as fail_file:
-            json.dump(failed_files_info, fail_file, indent=4)
+        with open(os.path.join(output_dir, "devin_swe_failed.json"), "w", encoding = 'utf8') as fail_file:
+            json.dump(failed_files_info, fail_file, indent=4, ensure_ascii=False)
 
     if setting == "all":
         merged_output = pass_files_info + failed_files_info
-        with open(os.path.join(output_dir, "devin_swe_outputs.json"), "w") as merge_file:
-            json.dump(merged_output, merge_file, indent=4)
+        with open(os.path.join(output_dir, "devin_swe_outputs.json"), "w", encoding = 'utf8') as merge_file:
+            json.dump(merged_output, merge_file, indent=4, ensure_ascii=False)
 
 
 if __name__ == '__main__':

@@ -69,12 +69,12 @@ class SessionManager:
             }
         if not os.path.exists(CACHE_DIR):
             os.makedirs(CACHE_DIR)
-        with open(SESSION_CACHE_FILE, "w+") as file:
-            json.dump(data, file)
+        with open(SESSION_CACHE_FILE, "w+", encoding = 'utf8') as file:
+            json.dump(data, file, ensure_ascii=False)
 
     def _load_sessions(self):
         try:
-            with open(SESSION_CACHE_FILE, "r") as file:
+            with open(SESSION_CACHE_FILE, "r", encoding = 'utf8') as file:
                 data = json.load(file)
                 for sid, sdata in data.items():
                     conn = Session(sid, None)

@@ -39,7 +39,8 @@ class LLM:
             llm_prompt_logger.debug(messages)
             resp = completion_unwrapped(*args, **kwargs)
             message_back = resp['choices'][0]['message']['content']
-            llm_response_logger.debug(message_back)
+            # llm_response_logger.debug(message_back)
+            llm_response_logger.debug(json.dumps(json.loads(message_backs), ensure_ascii=False).encode('utf8'))
             return resp
         self._completion = wrapper  # type: ignore
 

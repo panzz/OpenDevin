@@ -50,7 +50,7 @@ class Monologue:
         total_length = 0
         for t in self.thoughts:
             try:
-                total_length += len(json.dumps(t))
+                total_length += len(json.dumps(t, ensure_ascii=False))
             except TypeError as e:
                 print(f"Error serializing thought: {e}")
         return total_length

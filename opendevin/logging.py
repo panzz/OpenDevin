@@ -35,7 +35,7 @@ def get_file_handler():
     os.makedirs(log_dir, exist_ok=True)
     timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
     file_name = f"opendevin_{timestamp}.log"
-    file_handler = logging.FileHandler(os.path.join(log_dir, file_name))
+    file_handler = logging.FileHandler(os.path.join(log_dir, file_name), encoding='utf-8')
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(file_formatter)
     return file_handler
@@ -80,7 +80,7 @@ logging.getLogger('LiteLLM Proxy').disabled = True
 # LLM prompt and response logging
 class LlmFileHandler(logging.FileHandler):
 
-    def __init__(self, filename, mode='a', encoding=None, delay=False):
+    def __init__(self, filename, mode='a', encoding='utf-8', delay=False):
         """
         Initializes an instance of LlmFileHandler.
 

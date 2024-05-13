@@ -167,7 +167,7 @@ def get_summarize_monologue_prompt(thoughts: List[dict]):
     - str: A formatted string with the current monologue within the prompt
     """
     return MONOLOGUE_SUMMARY_PROMPT % {
-        'monologue': json.dumps({'old_monologue': thoughts}, indent=2),
+        'monologue': json.dumps({'old_monologue': thoughts}, indent=2, ensure_ascii=False),
     }
 
 def get_request_action_prompt(
@@ -214,7 +214,7 @@ def get_request_action_prompt(
         
     return ACTION_PROMPT % {
         'task': task,
-        'monologue': json.dumps(thoughts, indent=2),
+        'monologue': json.dumps(thoughts, indent=2, ensure_ascii=Falses),
         'background_commands': bg_commands_message,
         'hint': hint,
     }

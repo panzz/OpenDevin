@@ -81,13 +81,13 @@ class MessageStack:
         data = {}
         for sid, msgs in self._messages.items():
             data[sid] = [msg.to_dict() for msg in msgs]
-        with open(MSG_CACHE_FILE, "w+") as file:
-            json.dump(data, file)
+        with open(MSG_CACHE_FILE, "w+", encoding = 'utf8') as file:
+            json.dump(data, file, ensure_ascii=False)
 
     def _load_messages(self):
         try:
             # TODO: delete useless messages
-            with open(MSG_CACHE_FILE, "r") as file:
+            with open(MSG_CACHE_FILE, "r", encoding = 'utf8') as file:
                 data = json.load(file)
                 for sid, msgs in data.items():
                     self._messages[sid] = [Message.from_dict(msg) for msg in msgs]
