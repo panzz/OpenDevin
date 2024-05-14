@@ -4,6 +4,7 @@ from functools import partial
 
 from opendevin import config
 from opendevin.logging import llm_prompt_logger, llm_response_logger
+from agenthub.monologue_agent.utils.tools import num_tokens_from_string
 
 DEFAULT_API_KEY = config.get('LLM_API_KEY')
 DEFAULT_BASE_URL = config.get('LLM_BASE_URL')
@@ -14,6 +15,7 @@ DEFAULT_LLM_API_VERSION = config.get('LLM_API_VERSION')
 
 
 class LLM:
+    token_cnt = 0
     def __init__(self,
                  model=DEFAULT_MODEL_NAME,
                  api_key=DEFAULT_API_KEY,
@@ -30,6 +32,7 @@ class LLM:
         self._completion = partial(litellm_completion, model=self.model_name, api_key=self.api_key, base_url=self.base_url, api_version=self.api_version)
 
         completion_unwrapped = self._completion
+        self.token_cnt = 0
 
         def wrapper(*args, **kwargs):
             if 'messages' in kwargs:
@@ -39,8 +42,10 @@ class LLM:
             llm_prompt_logger.debug(messages)
             resp = completion_unwrapped(*args, **kwargs)
             message_back = resp['choices'][0]['message']['content']
-            # llm_response_logger.debug(message_back)
-            llm_response_logger.debug(json.dumps(json.loads(message_back), ensure_ascii=False).encode('utf8'))
+            self.token_cnt += num_tokens_from_string(json.dumps(messages))
+            logger.info(f"LLM token count total cost: {self.token_cnt}")
+            llm_response_logger.debug(message_back)
+            # llm_response_logger.debug(json.dumps(json.loads(message_back), ensure_ascii=False))
             return resp
         self._completion = wrapper  # type: ignore
 

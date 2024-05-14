@@ -25,6 +25,7 @@ json-repair = "*"
 playwright = "*"
 pexpect = "*"
 onnxruntime = "1.16.3"
+tiktoken = "0.6.0"
 
 [tool.poetry.group.llama-index.dependencies]
 llama-index = "*"

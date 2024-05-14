@@ -2,6 +2,7 @@
 # import re
 import time
 import datetime
+import tiktoken
 from opendevin.logging import opendevin_logger as logger
 
 
@@ -24,6 +25,15 @@ def show_exec_time(func):
     logger.info(f"[exec-time] {func.__name__} ran in {execution_time} ms")
     return result
   return wrapper
+
+def num_tokens_from_string(string: str, encoding_name = "cl100k_base") -> int:
+    """Returns the number of tokens in a text string."""
+    # print(f"num_tokens_from_string> string({encoding_name}):{string}")
+    encoding = tiktoken.get_encoding(encoding_name)
+    num_tokens = len(encoding.encode(string))
+    # print(f"num_tokens_from_string> num_tokens({encoding_name}):{num_tokens}")
+    logger.info(f"[string-tokens] current string token cost: {num_tokens}")
+    return num_tokens
 
 # def is_array_string_in_target(stringArray, targetString):
 #   '''

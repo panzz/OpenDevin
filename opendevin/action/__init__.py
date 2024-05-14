@@ -37,7 +37,13 @@ def action_from_dict(action: dict) -> Action:
             f"'{action['action']=}' is not defined. Available actions: {ACTION_TYPE_TO_CLASS.keys()}"
         )
     args = action.get("args", {})
-    return action_class(**args)
+    # return action_class(**args)
+    ret = None
+    try:
+        ret = action_class(**args)
+    except TypeError as e:
+        print(f"Error: action: {action['action']} run with args: {args} error in action_from_dict.")
+    return ret
 
 
 __all__ = [
