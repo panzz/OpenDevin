@@ -1,3 +1,4 @@
+import json
 from typing import List
 from opendevin.agent import Agent
 from opendevin.state import State
@@ -29,6 +30,7 @@ from agenthub.monologue_agent.utils.monologue import Monologue
 from agenthub.monologue_agent.utils.memory import LongTermMemory
 from agenthub.monologue_agent.utils.tools import show_exec_time
 from opendevin.logging import opendevin_logger as logger
+from agenthub.monologue_agent.utils.tools import num_tokens_from_string
 
 MAX_MONOLOGUE_LENGTH = 20000
 MAX_OUTPUT_LENGTH = 5000
@@ -131,6 +133,7 @@ class MonologueAgent(Agent):
     """
 
     _initialized = False
+    token_cnt = 0
 
     def __init__(self, llm: LLM):
         """
@@ -267,6 +270,8 @@ class MonologueAgent(Agent):
         messages = [{"content": prompt, "role": "user"}]
         resp = self.llm.completion(messages=messages)
         action_resp = resp["choices"][0]["message"]["content"]
+        self.token_cnt += num_tokens_from_string(json.dumps(action_resp))
+        logger.info(f"LLM Output token count total cost: {self.token_cnt}")
         action = prompts.parse_action_response(action_resp)
         # logger.debug(f"MonologueAgent.step> action: {action}")
         self.latest_action = action

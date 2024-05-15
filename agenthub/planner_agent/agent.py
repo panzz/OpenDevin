@@ -1,3 +1,4 @@
+import json
 from typing import List
 from .prompt import get_prompt, parse_response
 
@@ -8,12 +9,14 @@ from opendevin.state import State
 from opendevin.action import Action
 from agenthub.monologue_agent.utils.tools import show_exec_time
 # from opendevin.logging import opendevin_logger as logger
+from agenthub.monologue_agent.utils.tools import num_tokens_from_string
 
 class PlannerAgent(Agent):
     """
     The planner agent utilizes a special prompting strategy to create long term plans for solving problems.
     The agent is given its previous action-observation pairs, current task, and hint based on last action taken at every step.
     """
+    token_cnt = 0
 
     def __init__(self, llm: LLM):
         """
@@ -44,6 +47,8 @@ class PlannerAgent(Agent):
         messages = [{"content": prompt, "role": "user"}]
         resp = self.llm.completion(messages=messages)
         action_resp = resp['choices'][0]['message']['content']
+        self.token_cnt += num_tokens_from_string(json.dumps(action_resp))
+        logger.info(f"LLM Output token count total cost: {self.token_cnt}")
         action = parse_response(action_resp)
         # logger.debug(f"PlannerAgent.step> action: {action}")
         return action

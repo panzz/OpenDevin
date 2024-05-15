@@ -1,15 +1,18 @@
+import json
 import traceback
 from opendevin.llm.llm import LLM
 import agenthub.monologue_agent.utils.json as json
 import agenthub.monologue_agent.utils.prompts as prompts
 from agenthub.monologue_agent.utils.tools import show_exec_time
 from opendevin.logging import opendevin_logger as logger
+from agenthub.monologue_agent.utils.tools import num_tokens_from_string
 
 class Monologue:
     """
     The monologue is a representation for the agent's internal monologue where it can think.
     The agent has the capability of using this monologue for whatever it wants.
     """
+    token_cnt = 0
 
     def __init__(self):
         """
@@ -72,6 +75,8 @@ class Monologue:
             messages = [{"content": prompt,"role": "user"}]
             resp = llm.completion(messages=messages)
             summary_resp = resp['choices'][0]['message']['content']
+            self.token_cnt += num_tokens_from_string(json.dumps(summary_resp))
+            logger.info(f"LLM Output token count total cost: {self.token_cnt}")
             self.thoughts = prompts.parse_summary_response(strip_markdown(summary_resp))
             logger.debug(f"MonologueAgent:condense> thoughts:{self.thoughts}")
         except Exception as e:

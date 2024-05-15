@@ -1,4 +1,5 @@
 import re
+import json
 from typing import List, Mapping
 
 from opendevin.action import (
@@ -17,6 +18,7 @@ from opendevin.parse_commands import parse_command_file
 from opendevin.state import State
 from agenthub.monologue_agent.utils.tools import show_exec_time
 from opendevin.logging import opendevin_logger as logger
+from agenthub.monologue_agent.utils.tools import num_tokens_from_string
 
 COMMAND_DOCS = parse_command_file()
 COMMAND_SEGMENT = (
@@ -68,6 +70,7 @@ class CodeActAgent(Agent):
     The Code Act Agent is a minimalist agent. 
     The agent works by passing the model a list of action-observaiton pairs and prompting the model to take the next step.
     """
+    token_cnt = 0
     
     def __init__(
         self,
@@ -128,6 +131,8 @@ class CodeActAgent(Agent):
             stop=["</execute>"],
             temperature=0.0
         )
+        self.token_cnt += num_tokens_from_string(json.dumps(response))
+        logger.info(f"LLM Output token count total cost: {self.token_cnt}")
         action_str: str = parse_response(response)
         logger.debug(f"CodeActAgent.step> action_str: {action_str}")
         self.messages.append({"role": "assistant", "content": action_str})

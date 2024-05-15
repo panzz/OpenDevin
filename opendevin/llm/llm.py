@@ -4,6 +4,7 @@ from functools import partial
 
 from opendevin import config
 from opendevin.logging import llm_prompt_logger, llm_response_logger
+from opendevin.logging import opendevin_logger as logger
 from agenthub.monologue_agent.utils.tools import num_tokens_from_string
 
 DEFAULT_API_KEY = config.get('LLM_API_KEY')
@@ -43,7 +44,7 @@ class LLM:
             resp = completion_unwrapped(*args, **kwargs)
             message_back = resp['choices'][0]['message']['content']
             self.token_cnt += num_tokens_from_string(json.dumps(messages))
-            logger.info(f"LLM token count total cost: {self.token_cnt}")
+            logger.info(f"LLM Input token count total cost: {self.token_cnt}")
             llm_response_logger.debug(message_back)
             # llm_response_logger.debug(json.dumps(json.loads(message_back), ensure_ascii=False))
             return resp
